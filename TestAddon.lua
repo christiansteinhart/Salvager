@@ -72,10 +72,14 @@ function TestAddonScrollBar_Update()
    for line=1,5 do
      lineplusoffset = line + FauxScrollFrame_GetOffset(TestAddonScrollBar);
      if loot[lineplusoffset] ~= nil then
-       getglobal("TestAddonEntry"..line):SetText(loot[lineplusoffset]);
+       getglobal("TestAddonEntry"..line).text:SetText(loot[lineplusoffset]);
        getglobal("TestAddonEntry"..line):Show();
      else
        getglobal("TestAddonEntry"..line):Hide();
      end
    end
+end
+
+function TestAddonSell(itemLink)
+    print(itemLink)
 end

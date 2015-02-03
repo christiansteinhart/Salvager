@@ -3,12 +3,28 @@
                    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ 
                    ..\..\FrameXML\UI.xsd">
     <Script File="HelloWorld.lua"/>
-    <Button name = "TestAddonEntryTemplate" virtual="true">
+    <Frame name = "TestAddonEntryTemplate" virtual="true" enableMouse="true">
         <Size>
-            <AbsDimension x="150" y="32" />
+            <AbsDimension x="350" y="32" />
         </Size>
-        <NormalFont style="GameFontHighlightLeft"/>
-    </Button>
+        <Layers>
+          <Layer>
+              <FontString parentKey="text" inherits="GameFontNormal" justifyH="LEFT" text="Lootlist Window" />
+          </Layer>
+        </Layers>
+        <Frames>
+          <Button inherits="OptionsButtonTemplate" text="Sell">
+            <Anchors>
+              <Anchor point="RIGHT">
+                <Offset x="0" y="0"/>
+              </Anchor> 
+            </Anchors>
+            <Scripts>
+              <OnClick> TestAddonSell(self:GetParent().text:GetText()) </OnClick>
+            </Scripts>
+          </Button>
+        </Frames>
+    </Frame>
     <Frame name="TestAddonFrame" parent="UIParent" enableMouse="true" movable="true">
         <Size x="400" y="220"/>
         <ResizeBounds>
@@ -60,6 +76,16 @@
                 </Layer>
              </Layers>
           </Frame>
+          <Button name="$parentButtonClose" inherits="UIPanelCloseButton">
+            <Anchors>
+              <Anchor point="TOPRIGHT">
+                <Offset x="3" y="3"/>
+              </Anchor> 
+            </Anchors>
+            <Scripts>
+              <OnClick> self:GetParent():Hide(); </OnClick>
+            </Scripts>
+          </Button>
           <ScrollFrame name="TestAddonScrollBar" inherits="FauxScrollFrameTemplate" hidden="true">
             <Anchors>
               <Anchor point="TOPLEFT">
@@ -83,7 +109,7 @@
             </Scripts>
           </ScrollFrame>
 
-          <Button name="TestAddonEntry1" inherits="TestAddonEntryTemplate">
+          <Frame name="TestAddonEntry1" inherits="TestAddonEntryTemplate">
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="TestAddonScrollBar" relativePoint="TOPLEFT">
                 <Offset>
@@ -91,27 +117,27 @@
                 </Offset>
                </Anchor>
             </Anchors>
-          </Button>
-          <Button name="TestAddonEntry2" inherits="TestAddonEntryTemplate">
+          </Frame>
+          <Frame name="TestAddonEntry2" inherits="TestAddonEntryTemplate">
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="TestAddonEntry1" relativePoint="BOTTOMLEFT"/>
             </Anchors>
-          </Button>
-          <Button name="TestAddonEntry3" inherits="TestAddonEntryTemplate">
+          </Frame>
+          <Frame name="TestAddonEntry3" inherits="TestAddonEntryTemplate">
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="TestAddonEntry2" relativePoint="BOTTOMLEFT"/>
             </Anchors>
-          </Button>
-          <Button name="TestAddonEntry4" inherits="TestAddonEntryTemplate">
+          </Frame>
+          <Frame name="TestAddonEntry4" inherits="TestAddonEntryTemplate">
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="TestAddonEntry3" relativePoint="BOTTOMLEFT"/>
             </Anchors>
-          </Button>
-          <Button name="TestAddonEntry5" inherits="TestAddonEntryTemplate">
+          </Frame>
+          <Frame name="TestAddonEntry5" inherits="TestAddonEntryTemplate">
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="TestAddonEntry4" relativePoint="BOTTOMLEFT"/>
             </Anchors>
-          </Button>
+          </Frame>
 
         </Frames>
     </Frame>
