@@ -1,0 +1,119 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" 
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                   xsi:schemaLocation="http://www.blizzard.com/wow/ui/ 
+                   ..\..\FrameXML\UI.xsd">
+    <Script File="HelloWorld.lua"/>
+    <Button name = "TestAddonEntryTemplate" virtual="true">
+        <Size>
+            <AbsDimension x="150" y="32" />
+        </Size>
+        <NormalFont style="GameFontHighlightLeft"/>
+    </Button>
+    <Frame name="TestAddonFrame" parent="UIParent" enableMouse="true" movable="true">
+        <Size x="400" y="220"/>
+        <ResizeBounds>
+            <minResize>
+                <AbsDimension x="400" y="160"/>
+            </minResize>
+            <maxResize>
+                <AbsDimension x="400" y="700"/>
+            </maxResize>
+        </ResizeBounds>
+        <Anchors>
+          <Anchor point="CENTER"/>
+        </Anchors>
+        <Scripts>
+            <OnLoad> 
+                self:RegisterEvent("CHAT_MSG_LOOT")
+                TestAddonScrollBar:Show()
+                print("TestAddonLoaded")
+            </OnLoad>
+            <OnEvent function="TestAddonEventHandler"/>
+        </Scripts>
+        <TitleRegion>
+            <Size x="400" y="20"/>
+            <Anchors>
+                <Anchor point="TOP"/>
+            </Anchors>
+        </TitleRegion>
+        <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+          <BackgroundInsets>
+            <AbsInset left="4" right="4" top="4" bottom="4" />
+          </BackgroundInsets>
+          <TileSize>
+            <AbsValue val="16" />
+          </TileSize>
+          <EdgeSize>
+            <AbsValue val="16" />
+          </EdgeSize>
+        </Backdrop>
+        <Frames>
+          <Frame name="TestAddonTitleFrame" parentKey="header">
+             <Size x="400" y="20"/>
+             <Anchors>
+              <Anchor point="TOP" relativeTo="TestAddonFrame" relativePoint="TOP" />
+             </Anchors>
+             <Layers>
+                <Layer>
+                    <FontString parentKey="text" inherits="GameFontNormal" justifyH="CENTER" text="Lootlist Window">
+                    </FontString>
+                </Layer>
+             </Layers>
+          </Frame>
+          <ScrollFrame name="TestAddonScrollBar" inherits="FauxScrollFrameTemplate" hidden="true">
+            <Anchors>
+              <Anchor point="TOPLEFT">
+                <Offset>
+                  <AbsDimension x="0" y="-28"/>
+                </Offset>
+              </Anchor>
+              <Anchor point="BOTTOMRIGHT">
+                <Offset>
+                  <AbsDimension x="-30" y="8"/>
+                </Offset>
+              </Anchor>
+            </Anchors>
+            <Scripts>
+              <OnVerticalScroll>
+                FauxScrollFrame_OnVerticalScroll(self, offset, 16, TestAddonScrollBar_Update);
+              </OnVerticalScroll>
+              <OnShow>
+                TestAddonScrollBar_Update()
+              </OnShow>
+            </Scripts>
+          </ScrollFrame>
+
+          <Button name="TestAddonEntry1" inherits="TestAddonEntryTemplate">
+            <Anchors>
+              <Anchor point="TOPLEFT" relativeTo="TestAddonScrollBar" relativePoint="TOPLEFT">
+                <Offset>
+                  <AbsDimension x="8" y="0"/>
+                </Offset>
+               </Anchor>
+            </Anchors>
+          </Button>
+          <Button name="TestAddonEntry2" inherits="TestAddonEntryTemplate">
+            <Anchors>
+              <Anchor point="TOPLEFT" relativeTo="TestAddonEntry1" relativePoint="BOTTOMLEFT"/>
+            </Anchors>
+          </Button>
+          <Button name="TestAddonEntry3" inherits="TestAddonEntryTemplate">
+            <Anchors>
+              <Anchor point="TOPLEFT" relativeTo="TestAddonEntry2" relativePoint="BOTTOMLEFT"/>
+            </Anchors>
+          </Button>
+          <Button name="TestAddonEntry4" inherits="TestAddonEntryTemplate">
+            <Anchors>
+              <Anchor point="TOPLEFT" relativeTo="TestAddonEntry3" relativePoint="BOTTOMLEFT"/>
+            </Anchors>
+          </Button>
+          <Button name="TestAddonEntry5" inherits="TestAddonEntryTemplate">
+            <Anchors>
+              <Anchor point="TOPLEFT" relativeTo="TestAddonEntry4" relativePoint="BOTTOMLEFT"/>
+            </Anchors>
+          </Button>
+
+        </Frames>
+    </Frame>
+
+</Ui>
