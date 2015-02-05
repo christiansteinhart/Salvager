@@ -54,7 +54,7 @@
           </Button>
         </Frames>
     </Frame>
-    <Frame name="TestAddonFrame" parent="UIParent" enableMouse="true" movable="true">
+    <Frame name="TestAddonFrame" parent="UIParent" enableMouse="true" movable="true" hidden="true">
         <Size x="400" y="275"/>
         <ResizeBounds>
             <minResize>
