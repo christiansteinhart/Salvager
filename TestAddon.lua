@@ -126,3 +126,15 @@ function TestAddonToggleSellButton(self, event, ...)
     elseif event == "MERCHANT_CLOSED" then self:Disable()
     end
 end
+
+function TestAddonToggleRecord()
+    if enabled then
+        TestAddonFrameButtonToggle:SetText("Enable")
+        TestAddonFrame:UnregisterEvent("CHAT_MSG_LOOT")
+        enabled = false
+    else
+        TestAddonFrameButtonToggle:SetText("Disable")
+        TestAddonFrame:RegisterEvent("CHAT_MSG_LOOT")
+        enabled = true
+    end
+end

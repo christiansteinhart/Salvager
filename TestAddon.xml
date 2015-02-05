@@ -68,10 +68,8 @@
           <Anchor point="CENTER"/>
         </Anchors>
         <Scripts>
-            <OnLoad> 
-                self:RegisterEvent("CHAT_MSG_LOOT")
+            <OnLoad>
                 TestAddonScrollBar:Show()
-                print("TestAddonLoaded")
             </OnLoad>
             <OnEvent function="TestAddonEventHandler"/>
         </Scripts>
@@ -123,6 +121,16 @@
             </Anchors>
             <Scripts>
               <OnClick> clear_loot(); </OnClick>
+            </Scripts>
+          </Button>
+          <Button name="$parentButtonToggle" inherits="OptionsButtonTemplate" text="Enable">
+            <Anchors>
+              <Anchor point="RIGHT" relativeTo="$parentButtonClear" relativePoint="LEFT">
+                <Offset x="-5" y="0"/>
+              </Anchor> 
+            </Anchors>
+            <Scripts>
+              <OnClick> TestAddonToggleRecord(); </OnClick>
             </Scripts>
           </Button>
           <ScrollFrame name="TestAddonScrollBar" inherits="FauxScrollFrameTemplate" hidden="true">
