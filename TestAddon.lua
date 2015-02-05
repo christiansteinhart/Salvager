@@ -64,6 +64,16 @@ function hide_lootlist()
     TestAddonFrame:Hide()
 end
 
+function remove_from_list(itemLink)
+    for k,v in pairs(loot) do
+        if v == itemLink then
+            tremove(loot, k)
+            break
+        end
+    end
+    TestAddonScrollBar_Update();
+end
+
 function TestAddonScrollBar_Update()
 --   print("sbupdate")
    local line; -- 1 through 5 of our window to scroll
@@ -80,6 +90,31 @@ function TestAddonScrollBar_Update()
    end
 end
 
-function TestAddonSell(itemLink)
-    print(itemLink)
+function TestAddonSellItem(itemLink)
+    if GetItemCount(itemLink) > 0 then
+        for bag = 0,4,1 do 
+            for slot = 1, GetContainerNumSlots(bag), 1 do
+                if GetContainerItemLink(bag,slot) == itemLink then
+                    UseContainerItem(bag,slot);
+                end
+            end
+        end
+    end
+    remove_from_list(itemLink)
+end
+
+function TestAddonHandleItem(itemLink, action)
+    if action == "remove" then
+        remove_from_list(itemLink);
+    elseif action == "sell" then 
+        TestAddonSellItem(itemLink);
+    else
+        print(itemLink)
+    end
+end
+
+function TestAddonToggleSellButton(self, event, ...)
+    if     event == "MERCHANT_SHOW" then self:Enable()
+    elseif event == "MERCHANT_CLOSED" then self:Disable()
+    end
 end
