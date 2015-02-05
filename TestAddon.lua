@@ -34,19 +34,9 @@ function print_table(t)
 end
 
 SLASH_TESTADDON1 = '/lootlist'
+SLASH_TESTADDON2 = '/ll'
 function SlashCmdList.TESTADDON(msg, editbox)
-    print("/lootlist " .. msg)
-    if msg == "clear" then
-        clear_loot()
-    elseif msg == "list" then
-        print_table(loot)
-    elseif msg == "show" then
-        show_lootlist()
-    elseif msg == "hide" then
-        hide_lootlist()
-    else
-        print("Usage: /lootlist clear|list")
-    end
+    show_lootlist()
 end
 
 
