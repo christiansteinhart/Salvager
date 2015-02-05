@@ -9,7 +9,20 @@
         </Size>
         <Layers>
           <Layer>
-              <FontString parentKey="text" inherits="GameFontNormal" justifyH="LEFT" text="Lootlist Window" />
+              <FontString name="$parentItemText" parentKey="text" inherits="GameFontNormal" justifyH="LEFT">
+                <Anchors>
+                  <Anchor point="TOPLEFT">
+                    <Offset x="2" y="-6"/>
+                  </Anchor> 
+                </Anchors>
+              </FontString>
+              <FontString parentKey="info" inherits="GameFontNormal" justifyH="LEFT">
+                <Anchors>
+                  <Anchor point="TOPLEFT" relativeTo="$parentItemText" relativePoint="BOTTOMLEFT">
+                    <Offset x="0" y="-2"/>
+                  </Anchor> 
+                </Anchors>
+              </FontString>
           </Layer>
         </Layers>
         <Frames>

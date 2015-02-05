@@ -83,11 +83,19 @@ function TestAddonScrollBar_Update()
      lineplusoffset = line + FauxScrollFrame_GetOffset(TestAddonScrollBar);
      if loot[lineplusoffset] ~= nil then
        getglobal("TestAddonEntry"..line).text:SetText(loot[lineplusoffset]);
+       getglobal("TestAddonEntry"..line).info:SetText(TestAddonGetItemInfoString(loot[lineplusoffset]));
        getglobal("TestAddonEntry"..line):Show();
      else
        getglobal("TestAddonEntry"..line):Hide();
      end
    end
+end
+
+function TestAddonGetItemInfoString(itemLink)
+    -- itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(itemLink)
+    _, _, _, itemLevel, itemMinLevel = GetItemInfo(itemLink)
+    count = GetItemCount(itemLink);
+    return "Lvl: " .. itemMinLevel .. ",  iLvl: " .. itemLevel .. ",  Qty: " .. count
 end
 
 function TestAddonSellItem(itemLink)
