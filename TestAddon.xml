@@ -3,6 +3,13 @@
                    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ 
                    ..\..\FrameXML\UI.xsd">
     <Script File="HelloWorld.lua"/>
+    <Button name="TestAddonEntryButtonTemplate" inherits="UIPanelButtonTemplate" virtual="true">
+        <Size>
+            <AbsDimension x="60" y="21"/>
+        </Size>
+    </Button>
+
+
     <Frame name = "TestAddonEntryTemplate" virtual="true" enableMouse="true">
         <Size>
             <AbsDimension x="365" y="44" />
@@ -26,7 +33,7 @@
           </Layer>
         </Layers>
         <Frames>
-          <Button inherits="OptionsButtonTemplate" text="Remove" parentKey="removeBtn">
+          <Button inherits="TestAddonEntryButtonTemplate" text="Remove" parentKey="removeBtn">
             <Anchors>
               <Anchor point="TOPRIGHT">
                 <Offset x="0" y="-2"/>
@@ -36,7 +43,17 @@
               <OnClick> TestAddonHandleItem(self:GetParent().text:GetText(), "remove") </OnClick>
             </Scripts>
           </Button>
-          <Button inherits="OptionsButtonTemplate" text="Sell" parentKey="sellBtn">
+          <Button inherits="TestAddonEntryButtonTemplate" text="Ignore" parentKey="ignoreBtn">
+            <Anchors>
+              <Anchor point="TOPRIGHT">
+                <Offset x="-60" y="-2"/>
+              </Anchor> 
+            </Anchors>
+            <Scripts>
+              <OnClick> TestAddonHandleItem(self:GetParent().text:GetText(), "ignore") </OnClick>
+            </Scripts>
+          </Button>
+          <Button inherits="TestAddonEntryButtonTemplate" text="Sell" parentKey="sellBtn">
             <Anchors>
               <Anchor point="BOTTOMRIGHT">
                 <Offset x="0" y="2"/>
@@ -50,6 +67,16 @@
               </OnLoad>
               <OnEvent function="TestAddonToggleSellButton" />
               <OnClick> TestAddonHandleItem(self:GetParent().text:GetText(), "sell") </OnClick>
+            </Scripts>
+          </Button>
+          <Button inherits="TestAddonEntryButtonTemplate" text="Destroy" parentKey="destroyBtn" hidden="true">
+            <Anchors>
+              <Anchor point="BOTTOMRIGHT">
+                <Offset x="-60" y="2"/>
+              </Anchor> 
+            </Anchors>
+            <Scripts>
+              <OnClick> TestAddonHandleItem(self:GetParent().text:GetText(), "destroy") </OnClick>
             </Scripts>
           </Button>
         </Frames>

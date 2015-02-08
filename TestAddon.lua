@@ -1,4 +1,4 @@
-local loot = {}
+local loot, ignored_loot = {}, {}
 local enabled = false
 
 function HelloWorld() 
@@ -11,7 +11,7 @@ function TestAddonEventHandler(self, event, ...)
     -- print(event);
     if event == "CHAT_MSG_LOOT" then
         itemLink = parseLootMessage(msg);
-        if tContains(loot, itemLink) == nil then 
+        if tContains(loot, itemLink) == nil and tContains(ignored_loot, itemLink) == nil then 
             table.insert(loot, itemLink)
         end
     end
@@ -101,11 +101,40 @@ function TestAddonSellItem(itemLink)
     remove_from_list(itemLink)
 end
 
+function TestAddonDestroyItem(itemLink)
+    if true then return end
+    if GetItemCount(itemLink) > 0 then
+        for bag = 0,4,1 do 
+            for slot = 1, GetContainerNumSlots(bag), 1 do
+                if GetContainerItemLink(bag,slot) == itemLink then
+                    ClearCursor();
+                    PickupContainerItem(bag, slot);
+                    DeleteCursorItem();
+                end
+            end
+        end
+    end
+    remove_from_list(itemLink)
+end
+
+function TestAddonIgnoreItem(itemLink)
+    if tContains(ignored_loot, itemLink) == nil then 
+        table.insert(ignored_loot, itemLink)
+    end
+
+    remove_from_list(itemLink)
+end
+
+
 function TestAddonHandleItem(itemLink, action)
     if action == "remove" then
         remove_from_list(itemLink);
     elseif action == "sell" then 
         TestAddonSellItem(itemLink);
+    elseif action == "destroy" then
+        TestAddonDestroyItem(itemLink);
+    elseif action == "ignore" then
+        TestAddonIgnoreItem(itemLink);
     else
         print(itemLink)
     end
