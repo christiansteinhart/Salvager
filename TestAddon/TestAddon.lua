@@ -92,7 +92,7 @@ function TestAddonSellItem(itemLink)
     if GetItemCount(itemLink) > 0 then
         for bag = 0,4,1 do 
             for slot = 1, GetContainerNumSlots(bag), 1 do
-                if GetContainerItemLink(bag,slot) == itemLink then
+                if TestAddonItemEquals(GetContainerItemLink(bag,slot), itemLink, (slot == 1 and bag == 0)) then
                     UseContainerItem(bag,slot);
                 end
             end
@@ -156,4 +156,20 @@ function TestAddonToggleRecord()
         TestAddonFrame:RegisterEvent("CHAT_MSG_LOOT")
         enabled = true
     end
+end
+
+function TestAddonItemEquals(item1, item2, debug)
+    if item1 == nil or item2 == nil then return false end
+    itemName1, itemLink1, itemRarity1, itemLevel1, itemMinLevel1, itemType1, itemSubType1, itemStackCount1, itemEquipLoc1, itemTexture1, itemSellPrice1 = GetItemInfo(item1)
+    itemName2, itemLink2, itemRarity2, itemLevel2, itemMinLevel2, itemType2, itemSubType2, itemStackCount2, itemEquipLoc2, itemTexture2, itemSellPrice2 = GetItemInfo(item2)
+    return (
+        itemName1 == itemName2 and
+        itemRarity1 == itemRarity2 and
+        itemLevel1 == itemLevel2 and
+        itemMinLevel1 == itemMinLevel2 and
+        itemType1 == itemType2 and
+        itemSubType1 == itemSubType2 and
+        itemStackCount1 == itemStackCount2 and
+        itemEquipLoc1 == itemEquipLoc2
+    )
 end
