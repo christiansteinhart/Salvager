@@ -2,15 +2,15 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
                    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ 
                    ..\..\FrameXML\UI.xsd">
-    <Script File="HelloWorld.lua"/>
-    <Button name="TestAddonEntryButtonTemplate" inherits="UIPanelButtonTemplate" virtual="true">
+    <Script File="Salvager.lua"/>
+    <Button name="SalvagerEntryButtonTemplate" inherits="UIPanelButtonTemplate" virtual="true">
         <Size>
             <AbsDimension x="60" y="21"/>
         </Size>
     </Button>
 
 
-    <Frame name = "TestAddonEntryTemplate" virtual="true" enableMouse="true">
+    <Frame name = "SalvagerEntryTemplate" virtual="true" enableMouse="true">
         <Size>
             <AbsDimension x="365" y="44" />
         </Size>
@@ -33,27 +33,27 @@
           </Layer>
         </Layers>
         <Frames>
-          <Button inherits="TestAddonEntryButtonTemplate" text="Remove" parentKey="removeBtn">
+          <Button inherits="SalvagerEntryButtonTemplate" text="Remove" parentKey="removeBtn">
             <Anchors>
               <Anchor point="TOPRIGHT">
                 <Offset x="0" y="-2"/>
               </Anchor> 
             </Anchors>
             <Scripts>
-              <OnClick> TestAddonHandleItem(self:GetParent().text:GetText(), "remove") </OnClick>
+              <OnClick> SalvagerHandleItem(self:GetParent().text:GetText(), "remove") </OnClick>
             </Scripts>
           </Button>
-          <Button inherits="TestAddonEntryButtonTemplate" text="Ignore" parentKey="ignoreBtn">
+          <Button inherits="SalvagerEntryButtonTemplate" text="Ignore" parentKey="ignoreBtn">
             <Anchors>
               <Anchor point="TOPRIGHT">
                 <Offset x="-60" y="-2"/>
               </Anchor> 
             </Anchors>
             <Scripts>
-              <OnClick> TestAddonHandleItem(self:GetParent().text:GetText(), "ignore") </OnClick>
+              <OnClick> SalvagerHandleItem(self:GetParent().text:GetText(), "ignore") </OnClick>
             </Scripts>
           </Button>
-          <Button inherits="TestAddonEntryButtonTemplate" text="Sell" parentKey="sellBtn">
+          <Button inherits="SalvagerEntryButtonTemplate" text="Sell" parentKey="sellBtn">
             <Anchors>
               <Anchor point="BOTTOMRIGHT">
                 <Offset x="0" y="2"/>
@@ -65,23 +65,23 @@
                 self:RegisterEvent("MERCHANT_SHOW");
                 self:RegisterEvent("MERCHANT_CLOSED");
               </OnLoad>
-              <OnEvent function="TestAddonToggleSellButton" />
-              <OnClick> TestAddonHandleItem(self:GetParent().text:GetText(), "sell") </OnClick>
+              <OnEvent function="SalvagerToggleSellButton" />
+              <OnClick> SalvagerHandleItem(self:GetParent().text:GetText(), "sell") </OnClick>
             </Scripts>
           </Button>
-          <Button inherits="TestAddonEntryButtonTemplate" text="Destroy" parentKey="destroyBtn" hidden="true">
+          <Button inherits="SalvagerEntryButtonTemplate" text="Destroy" parentKey="destroyBtn" hidden="true">
             <Anchors>
               <Anchor point="BOTTOMRIGHT">
                 <Offset x="-60" y="2"/>
               </Anchor> 
             </Anchors>
             <Scripts>
-              <OnClick> TestAddonHandleItem(self:GetParent().text:GetText(), "destroy") </OnClick>
+              <OnClick> SalvagerHandleItem(self:GetParent().text:GetText(), "destroy") </OnClick>
             </Scripts>
           </Button>
         </Frames>
     </Frame>
-    <Frame name="TestAddonFrame" parent="UIParent" enableMouse="true" movable="true" hidden="true">
+    <Frame name="SalvagerFrame" parent="UIParent" enableMouse="true" movable="true" hidden="true">
         <Size x="400" y="275"/>
         <ResizeBounds>
             <minResize>
@@ -96,9 +96,9 @@
         </Anchors>
         <Scripts>
             <OnLoad>
-                TestAddonScrollBar:Show()
+                SalvagerScrollBar:Show()
             </OnLoad>
-            <OnEvent function="TestAddonEventHandler"/>
+            <OnEvent function="SalvagerEventHandler"/>
         </Scripts>
         <TitleRegion>
             <Size x="400" y="20"/>
@@ -118,14 +118,14 @@
           </EdgeSize>
         </Backdrop>
         <Frames>
-          <Frame name="TestAddonTitleFrame" parentKey="header">
+          <Frame name="SalvagerTitleFrame" parentKey="header">
              <Size x="400" y="20"/>
              <Anchors>
-              <Anchor point="TOP" relativeTo="TestAddonFrame" relativePoint="TOP" />
+              <Anchor point="TOP" relativeTo="SalvagerFrame" relativePoint="TOP" />
              </Anchors>
              <Layers>
                 <Layer>
-                    <FontString parentKey="text" inherits="GameFontNormal" justifyH="CENTER" text="Lootlist Window">
+                    <FontString parentKey="text" inherits="GameFontNormal" justifyH="CENTER" text="Salvager">
                     </FontString>
                 </Layer>
              </Layers>
@@ -157,10 +157,10 @@
               </Anchor> 
             </Anchors>
             <Scripts>
-              <OnClick> TestAddonToggleRecord(); </OnClick>
+              <OnClick> SalvagerToggleRecord(); </OnClick>
             </Scripts>
           </Button>
-          <ScrollFrame name="TestAddonScrollBar" inherits="FauxScrollFrameTemplate" hidden="true">
+          <ScrollFrame name="SalvagerScrollBar" inherits="FauxScrollFrameTemplate" hidden="true">
             <Anchors>
               <Anchor point="TOPLEFT">
                 <Offset>
@@ -175,41 +175,41 @@
             </Anchors>
             <Scripts>
               <OnVerticalScroll>
-                FauxScrollFrame_OnVerticalScroll(self, offset, 16, TestAddonScrollBar_Update);
+                FauxScrollFrame_OnVerticalScroll(self, offset, 16, SalvagerScrollBar_Update);
               </OnVerticalScroll>
               <OnShow>
-                TestAddonScrollBar_Update()
+                SalvagerScrollBar_Update()
               </OnShow>
             </Scripts>
           </ScrollFrame>
 
-          <Frame name="TestAddonEntry1" inherits="TestAddonEntryTemplate">
+          <Frame name="SalvagerEntry1" inherits="SalvagerEntryTemplate">
             <Anchors>
-              <Anchor point="TOPLEFT" relativeTo="TestAddonScrollBar" relativePoint="TOPLEFT">
+              <Anchor point="TOPLEFT" relativeTo="SalvagerScrollBar" relativePoint="TOPLEFT">
                 <Offset>
                   <AbsDimension x="8" y="0"/>
                 </Offset>
                </Anchor>
             </Anchors>
           </Frame>
-          <Frame name="TestAddonEntry2" inherits="TestAddonEntryTemplate">
+          <Frame name="SalvagerEntry2" inherits="SalvagerEntryTemplate">
             <Anchors>
-              <Anchor point="TOPLEFT" relativeTo="TestAddonEntry1" relativePoint="BOTTOMLEFT"/>
+              <Anchor point="TOPLEFT" relativeTo="SalvagerEntry1" relativePoint="BOTTOMLEFT"/>
             </Anchors>
           </Frame>
-          <Frame name="TestAddonEntry3" inherits="TestAddonEntryTemplate">
+          <Frame name="SalvagerEntry3" inherits="SalvagerEntryTemplate">
             <Anchors>
-              <Anchor point="TOPLEFT" relativeTo="TestAddonEntry2" relativePoint="BOTTOMLEFT"/>
+              <Anchor point="TOPLEFT" relativeTo="SalvagerEntry2" relativePoint="BOTTOMLEFT"/>
             </Anchors>
           </Frame>
-          <Frame name="TestAddonEntry4" inherits="TestAddonEntryTemplate">
+          <Frame name="SalvagerEntry4" inherits="SalvagerEntryTemplate">
             <Anchors>
-              <Anchor point="TOPLEFT" relativeTo="TestAddonEntry3" relativePoint="BOTTOMLEFT"/>
+              <Anchor point="TOPLEFT" relativeTo="SalvagerEntry3" relativePoint="BOTTOMLEFT"/>
             </Anchors>
           </Frame>
-          <Frame name="TestAddonEntry5" inherits="TestAddonEntryTemplate">
+          <Frame name="SalvagerEntry5" inherits="SalvagerEntryTemplate">
             <Anchors>
-              <Anchor point="TOPLEFT" relativeTo="TestAddonEntry4" relativePoint="BOTTOMLEFT"/>
+              <Anchor point="TOPLEFT" relativeTo="SalvagerEntry4" relativePoint="BOTTOMLEFT"/>
             </Anchors>
           </Frame>
 

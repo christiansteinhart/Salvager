@@ -1,5 +1,5 @@
 ## Interface: 60000
 ## Title: Salvager
-## Notes: Salvager records your loot and helps you selling or handling it afterwards.
+## Notes: Salvager records your loot and helps you organizing it.
 Salvager.lua
 Salvager.xml
