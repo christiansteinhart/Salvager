@@ -1,5 +1,0 @@
-## Interface: 60000
-## Title: TestAddon
-## Notes: My Addon for testing stuff!
-TestAddon.lua
-TestAddon.xml
