@@ -84,6 +84,19 @@ function SalvagerGetItemInfoString(itemLink)
     return "Lvl: " .. itemMinLevel .. ",  iLvl: " .. itemLevel .. ",  Qty: " .. count
 end
 
+function SalvagerFindItem(itemLink)
+    if GetItemCount(itemLink) == 0 then
+        return nil, nil
+    end
+    for bag = 0,4,1 do 
+        for slot = 1, GetContainerNumSlots(bag), 1 do
+            if SalvagerItemEquals(GetContainerItemLink(bag,slot), itemLink, (slot == 1 and bag == 0)) then
+                return bag, slot
+            end
+        end
+    end
+end
+
 function SalvagerSellItem(itemLink)
     if GetItemCount(itemLink) > 0 then
         for bag = 0,4,1 do 
@@ -168,4 +181,19 @@ function SalvagerItemEquals(item1, item2, debug)
         itemStackCount1 == itemStackCount2 and
         itemEquipLoc1 == itemEquipLoc2
     )
+end
+
+function SalvagerInitSpellButton(button, profession)
+
+end
+
+local salvager_spell_disenchant = GetSpellInfo(13262)
+local salvager_macro_disenchant = "/cast %s;\n/use %d %d"
+function SalvagerSetMacro(button, macro, item)
+    macrotext = ""
+    if macro == "disenchant" then
+        bag, slot = SalvagerFindItem(item)
+        macrotext = format(salvager_macro_disenchant, salvager_spell_disenchant, bag, slot)
+    end
+    button:SetAttribute("macrotext", macrotext)
 end

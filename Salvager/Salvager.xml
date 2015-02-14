@@ -69,10 +69,29 @@
               <OnClick> SalvagerHandleItem(self:GetParent().text:GetText(), "sell") </OnClick>
             </Scripts>
           </Button>
-          <Button inherits="SalvagerEntryButtonTemplate" text="Destroy" parentKey="destroyBtn" hidden="true">
+          <Button inherits="SalvagerEntryButtonTemplate, SecureActionButtonTemplate" text="Diss" parentKey="disenchantBtn">
             <Anchors>
               <Anchor point="BOTTOMRIGHT">
                 <Offset x="-60" y="2"/>
+              </Anchor> 
+            </Anchors>
+            <Scripts>
+              <OnLoad> SalvagerInitSpellButton(self, "Disenchant") </OnLoad>
+              <PreClick> SalvagerSetMacro(self, "disenchant", self:GetParent().text:GetText()) </PreClick>
+              <PostClick> 
+                SalvagerSetMacro(self);
+                SalvagerHandleItem(self:GetParent().text:GetText(), "remove");
+              </PostClick>
+            </Scripts>
+            <Attributes>
+              <Attribute name="type" value="macro" />
+              <Attribute name="macrotext" value="" />
+            </Attributes>
+          </Button>
+          <Button inherits="SalvagerEntryButtonTemplate" text="Destroy" parentKey="destroyBtn" hidden="true">
+            <Anchors>
+              <Anchor point="BOTTOMRIGHT">
+                <Offset x="-120" y="2"/>
               </Anchor> 
             </Anchors>
             <Scripts>
