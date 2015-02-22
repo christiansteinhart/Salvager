@@ -117,7 +117,6 @@
             <OnLoad>
                 SalvagerScrollBar:Show()
             </OnLoad>
-            <OnEvent function="SalvagerEventHandler"/>
         </Scripts>
         <TitleRegion>
             <Size x="400" y="20"/>

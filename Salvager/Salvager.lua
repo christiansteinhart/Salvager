@@ -1,18 +1,14 @@
-local loot, ignored_loot = {}, {}
-local enabled = false
+local Salvager = LibStub("AceAddon-3.0"):NewAddon("Salvager", "AceConsole-3.0", "AceEvent-3.0");
+Salvager.recording = false;
+Salvager.loot = {};
+Salvager.ignored_loot = {};
 
-function SalvagerEventHandler(self, event, ...)
-    msg = ...
-
-    -- print(event);
-    if event == "CHAT_MSG_LOOT" then
-        itemLink = parseLootMessage(msg);
-        if tContains(loot, itemLink) == nil and tContains(ignored_loot, itemLink) == nil then 
-            table.insert(loot, itemLink)
-        end
+function Salvager:CHAT_MSG_LOOT(event, msg)
+    itemLink = parseLootMessage(msg);
+    if tContains(Salvager.loot, itemLink) == nil and tContains(Salvager.ignored_loot, itemLink) == nil then 
+        table.insert(Salvager.loot, itemLink)
     end
     SalvagerScrollBar_Update()
-    -- print(#(loot))
 end
 
 function parseLootMessage (msg)
@@ -29,15 +25,15 @@ function print_table(t)
     end
 end
 
-SLASH_SALVAGER1 = '/salvager'
-SLASH_SALVAGER2 = '/ll'
-function SlashCmdList.SALVAGER(msg, editbox)
+Salvager:RegisterChatCommand("ll", "SlashCommand")
+Salvager:RegisterChatCommand("salvager", "SlashCommand")
+function Salvager:SlashCommand(msg, editbox)
     show_lootlist()
 end
 
 
 function clear_loot()
-    wipe(loot)
+    wipe(Salvager.loot)
     SalvagerScrollBar_Update()
 end
 
@@ -51,9 +47,9 @@ function hide_lootlist()
 end
 
 function remove_from_list(itemLink)
-    for k,v in pairs(loot) do
+    for k,v in pairs(Salvager.loot) do
         if v == itemLink then
-            tremove(loot, k)
+            tremove(Salvager.loot, k)
             break
         end
     end
@@ -64,12 +60,12 @@ function SalvagerScrollBar_Update()
 --   print("sbupdate")
    local line; -- 1 through 5 of our window to scroll
    local lineplusoffset; -- an index into our data calculated from the scroll offset
-   FauxScrollFrame_Update(SalvagerScrollBar,#(loot),5,16);
+   FauxScrollFrame_Update(SalvagerScrollBar,#(Salvager.loot),5,16);
    for line=1,5 do
      lineplusoffset = line + FauxScrollFrame_GetOffset(SalvagerScrollBar);
-     if loot[lineplusoffset] ~= nil then
-       getglobal("SalvagerEntry"..line).text:SetText(loot[lineplusoffset]);
-       getglobal("SalvagerEntry"..line).info:SetText(SalvagerGetItemInfoString(loot[lineplusoffset]));
+     if Salvager.loot[lineplusoffset] ~= nil then
+       getglobal("SalvagerEntry"..line).text:SetText(Salvager.loot[lineplusoffset]);
+       getglobal("SalvagerEntry"..line).info:SetText(SalvagerGetItemInfoString(Salvager.loot[lineplusoffset]));
        getglobal("SalvagerEntry"..line):Show();
      else
        getglobal("SalvagerEntry"..line):Hide();
@@ -127,8 +123,8 @@ function SalvagerDestroyItem(itemLink)
 end
 
 function SalvagerIgnoreItem(itemLink)
-    if tContains(ignored_loot, itemLink) == nil then 
-        table.insert(ignored_loot, itemLink)
+    if tContains(Salvager.ignored_loot, itemLink) == nil then 
+        table.insert(Salvager.ignored_loot, itemLink)
     end
 
     remove_from_list(itemLink)
@@ -156,14 +152,14 @@ function SalvagerToggleSellButton(self, event, ...)
 end
 
 function SalvagerToggleRecord()
-    if enabled then
+    if Salvager.recording then
         SalvagerFrameButtonToggle:SetText("Enable")
-        SalvagerFrame:UnregisterEvent("CHAT_MSG_LOOT")
-        enabled = false
+        Salvager:UnregisterEvent("CHAT_MSG_LOOT")
+        Salvager.recording = false
     else
         SalvagerFrameButtonToggle:SetText("Disable")
-        SalvagerFrame:RegisterEvent("CHAT_MSG_LOOT")
-        enabled = true
+        Salvager:RegisterEvent("CHAT_MSG_LOOT")
+        Salvager.recording = true
     end
 end
 
