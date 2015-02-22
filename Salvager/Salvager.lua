@@ -1,11 +1,49 @@
-local Salvager = LibStub("AceAddon-3.0"):NewAddon("Salvager", "AceConsole-3.0", "AceEvent-3.0");
+local AddonName = "Salvager"
+local Salvager = LibStub("AceAddon-3.0"):NewAddon(AddonName, "AceConsole-3.0", "AceEvent-3.0");
 Salvager.recording = false;
 Salvager.loot = {};
-Salvager.ignored_loot = {};
+Salvager.ignoreStack = {}
+
+local myOptionsTable = {
+  type = "group",
+  args = {
+    show = {
+      name = "Show window",
+      desc = "Shows the salvager window",
+      type = "execute",
+      func = function() show_lootlist() end
+    },
+    ignore = {
+      name = "Ignore Items",
+      type = "group",
+      set = function(info,val) Salvager.ignoreStack.configproxy:setFilter(info, val) end,
+      get = function(info) return Salvager.ignoreStack.configproxy:getFilter(info) end,
+      args = {
+        gray = {
+          name = "Ignore poor (gray) items",
+          desc = "Ignores any items with poor quality",
+          type = "toggle"
+        },
+        trade = {
+          name = "Ignore trade goods",
+          desc = "Ignores any trade goods",
+          type = "toggle"
+        },
+        garrison = {
+          name = "Ignore garrison follower items",
+          desc = "Ignores any garrison follower upgrade itmes",
+          type = "toggle"
+        },
+      }
+    }
+  }
+}
+LibStub("AceConfig-3.0"):RegisterOptionsTable(AddonName, myOptionsTable, nil)
+LibStub("AceConfigDialog-3.0"):AddToBlizOptions(AddonName)
 
 function Salvager:CHAT_MSG_LOOT(event, msg)
     itemLink = parseLootMessage(msg);
-    if tContains(Salvager.loot, itemLink) == nil and tContains(Salvager.ignored_loot, itemLink) == nil then 
+    if tContains(Salvager.loot, itemLink) == nil and Salvager.ignoreStack:isIgnoredItem(itemLink) == false then 
         table.insert(Salvager.loot, itemLink)
     end
     SalvagerScrollBar_Update()
@@ -123,10 +161,7 @@ function SalvagerDestroyItem(itemLink)
 end
 
 function SalvagerIgnoreItem(itemLink)
-    if tContains(Salvager.ignored_loot, itemLink) == nil then 
-        table.insert(Salvager.ignored_loot, itemLink)
-    end
-
+    Salvager.ignoreStack:addIgnoredItem(itemLink)
     remove_from_list(itemLink)
 end
 
@@ -192,4 +227,86 @@ function SalvagerSetMacro(button, macro, item)
         macrotext = format(salvager_macro_disenchant, salvager_spell_disenchant, bag, slot)
     end
     button:SetAttribute("macrotext", macrotext)
+end
+
+
+Salvager.ignoreStack.availableFilter = {}
+Salvager.ignoreStack.selectedFilter = {}
+Salvager.ignoreStack.configproxy = {}
+Salvager.ignoreStack.ignoredItems = {}
+function Salvager.ignoreStack.configproxy:setFilter(info, value)
+    name = info[#info]
+    if value == true then
+        Salvager.ignoreStack:addFilter(name)
+    else
+        Salvager.ignoreStack:removeFilter(name)
+    end
+end
+
+function Salvager.ignoreStack.configproxy:getFilter(info)
+    return Salvager.ignoreStack.selectedFilter[info[#info]] ~= nil
+end
+
+function Salvager.ignoreStack:addFilter(name)
+    if Salvager.ignoreStack.availableFilter[name] ~= nil then
+        Salvager.ignoreStack.selectedFilter[name] = Salvager.ignoreStack.availableFilter[name];
+    end
+end
+
+function Salvager.ignoreStack:removeFilter(name)
+    if Salvager.ignoreStack.selectedFilter[name] ~= nil then
+        Salvager.ignoreStack.selectedFilter[name] = nil;
+    end
+end
+
+function Salvager.ignoreStack:addIgnoredItem(item)
+    _, itemLink = GetItemInfo(item)
+    table.insert(Salvager.ignoreStack.ignoredItems, itemLink)
+    Salvager.ignoreStack:addFilter("item")
+end
+
+function Salvager.ignoreStack:isIgnoredItem(item)
+    for _,callback in pairs(Salvager.ignoreStack.selectedFilter) do
+        if callback(item) then
+            return true
+        end
+    end
+    return false
+end
+
+
+Salvager.filter = {}
+Salvager.ignoreStack.availableFilter["item"] = function (item)
+    for _, ignoredItem in pairs(Salvager.ignoreStack.ignoredItems) do
+        if SalvagerItemEquals(item, ignoredItem) then
+            return true
+        end
+    end
+    return false
+end
+
+Salvager.ignoreStack.availableFilter["gray"] = function (item)
+    -- itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(itemLink)
+    _, _, itemRarity = GetItemInfo(itemLink);
+    return itemRarity == 0;
+end
+
+_, _, _, _, _, Salvager.filter.tradeGoodsString = GetAuctionItemClasses();
+Salvager.ignoreStack.availableFilter["trade"] = function (item)
+    -- itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(itemLink)
+    _, _, _, _, _, itemType = GetItemInfo(itemLink);
+    return itemType == Salvager.filter.tradeGoodsString;
+end
+
+Salvager.filter.garrisonItemIds = {
+    114806, 114745, 114808, 114746, 114822, 114807, -- Armor Tokens
+    114128, 114081, 114622, 114131, 114129, 114616  -- Weapon Tokens
+}
+Salvager.ignoreStack.availableFilter["garrison"] = function (item)
+    for _, garrisonItemIds in pairs(Salvager.filter.garrisonItemIds) do
+        if SalvagerItemEquals(item, garrisonItemIds) then
+            return true;
+        end
+    end
+    return false;
 end
