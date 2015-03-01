@@ -1,4 +1,4 @@
-## Interface: 60000
+## Interface: 60100
 ## Title: Salvager
 ## Notes: Salvager records your loot and helps you organizing it.
 embeds.xml
