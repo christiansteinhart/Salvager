@@ -41,6 +41,21 @@ local myOptionsTable = {
 LibStub("AceConfig-3.0"):RegisterOptionsTable(AddonName, myOptionsTable, nil)
 LibStub("AceConfigDialog-3.0"):AddToBlizOptions(AddonName)
 
+
+local myOptionsDefaults = {
+  global = {
+    filters = {},
+  }
+}
+function Salvager:OnInitialize()
+    self.database = LibStub("AceDB-3.0"):New("SalvagerDB", myOptionsDefaults, true)
+    for filterName, enabled in pairs (self.database.global.filters) do
+        if enabled then
+            Salvager.ignoreStack:addFilter(filterName)
+        end
+    end
+end
+
 function Salvager:CHAT_MSG_LOOT(event, msg)
     itemLink = parseLootMessage(msg);
     if tContains(Salvager.loot, itemLink) == nil and Salvager.ignoreStack:isIgnoredItem(itemLink) == false then 
@@ -250,12 +265,14 @@ end
 function Salvager.ignoreStack:addFilter(name)
     if Salvager.ignoreStack.availableFilter[name] ~= nil then
         Salvager.ignoreStack.selectedFilter[name] = Salvager.ignoreStack.availableFilter[name];
+        Salvager.database.global.filters[name] = true;
     end
 end
 
 function Salvager.ignoreStack:removeFilter(name)
     if Salvager.ignoreStack.selectedFilter[name] ~= nil then
         Salvager.ignoreStack.selectedFilter[name] = nil;
+        Salvager.database.global.filters[name] = false;
     end
 end
 
