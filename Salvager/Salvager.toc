@@ -1,4 +1,4 @@
-## Interface: 60100
+## Interface: 60200
 ## Title: Salvager
 ## Notes: Salvager records your loot and helps you organizing it.
 ##
