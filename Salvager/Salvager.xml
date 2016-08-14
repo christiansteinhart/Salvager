@@ -178,6 +178,46 @@
               <OnClick> SalvagerToggleRecord(); </OnClick>
             </Scripts>
           </Button>
+          <Button name="$parentButtonOpenCrate" inherits="OptionsButtonTemplate, SecureActionButtonTemplate" text="Open Crate">
+            <Anchors>
+              <Anchor point="RIGHT" relativeTo="$parentButtonToggle" relativePoint="LEFT">
+                <Offset x="-5" y="0"/>
+              </Anchor> 
+            </Anchors>
+            <Scripts>
+              <PreClick>
+                SalvagerEnable();
+                SalvagerCheckCrate(self);
+              </PreClick>
+              <PostClick>
+                SalvagerRestoreButton(self, "item");
+              </PostClick>
+            </Scripts>
+            <Attributes>
+              <Attribute name="type" value="item" />
+              <Attribute name="item" value="item:114120" />
+            </Attributes>
+          </Button>
+          <Button name="$parentButtonOpenBag" inherits="OptionsButtonTemplate, SecureActionButtonTemplate" text="Open Bag">
+            <Anchors>
+              <Anchor point="RIGHT" relativeTo="$parentButtonOpenCrate" relativePoint="LEFT">
+                <Offset x="-5" y="0"/>
+              </Anchor> 
+            </Anchors>
+            <Scripts>
+              <PreClick>
+                SalvagerEnable();
+                SalvagerCheckCrate(self);
+              </PreClick>
+              <PostClick>
+                SalvagerRestoreButton(self, "item");
+              </PostClick>
+            </Scripts>
+            <Attributes>
+              <Attribute name="type" value="item" />
+              <Attribute name="item" value="item:114116" />
+            </Attributes>
+          </Button>
           <ScrollFrame name="SalvagerScrollBar" inherits="FauxScrollFrameTemplate" hidden="true">
             <Anchors>
               <Anchor point="TOPLEFT">

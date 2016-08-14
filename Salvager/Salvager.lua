@@ -180,7 +180,6 @@ function SalvagerIgnoreItem(itemLink)
     remove_from_list(itemLink)
 end
 
-
 function SalvagerHandleItem(itemLink, action)
     if action == "remove" then
         remove_from_list(itemLink);
@@ -198,6 +197,12 @@ end
 function SalvagerToggleSellButton(self, event, ...)
     if     event == "MERCHANT_SHOW" then self:Enable()
     elseif event == "MERCHANT_CLOSED" then self:Disable()
+    end
+end
+
+function SalvagerEnable()
+    if not Salvager.recording then
+        SalvagerToggleRecord()
     end
 end
 
@@ -308,7 +313,7 @@ Salvager.ignoreStack.availableFilter["gray"] = function (item)
     return itemRarity == 0;
 end
 
-_, _, _, _, _, Salvager.filter.tradeGoodsString = GetAuctionItemClasses();
+Salvager.filter.tradeGoodsString = GetItemClassInfo(LE_ITEM_CLASS_TRADEGOODS);
 Salvager.ignoreStack.availableFilter["trade"] = function (item)
     -- itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(itemLink)
     _, _, _, _, _, itemType = GetItemInfo(itemLink);
@@ -326,4 +331,19 @@ Salvager.ignoreStack.availableFilter["garrison"] = function (item)
         end
     end
     return false;
+end
+
+function SalvagerCheckCrate(button)
+    local freeslots = 0
+    for lbag=0,4 do
+       numFreeSlots, BagType = GetContainerNumFreeSlots(lbag)
+       freeslots = freeslots + numFreeSlots
+    end
+    if freeslots < 4 then
+        button:SetAttribute("type",nil)
+    end
+end
+
+function SalvagerRestoreButton(button, type)
+    button:SetAttribute("type",type)
 end
